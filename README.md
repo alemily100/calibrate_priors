@@ -5,12 +5,10 @@ This repository contains the code used to simulate results for the paper **Calib
 This repository presents the code for the simulation studies undertaken within this paper.
 
 ## Description of R files
-* **functions.R** - code for Section 4: functions required to generate trials and identify the OBD for 5,000 simulations running in parallel. 
+* **procrm_functions.R** - code for Section 4.1: functions required to generate PRO-CRM trials and identify optimal doses.
+
+* **procrm_sim.R** - code for Section 4.1: code required to run PRO-CRM simulation studies. Functions required to run this code are defined in `procrm_functions.R`.
+
+* **efftox_functions.R** - code for Section 4.2: functions required to generate Eff+Tox-CRM trials and identify optimal doses.
   
-* **sim.R** - code for Section 4: code required to run PRO-ADD simulation studies. Functions required to run this code are defined in `functions.R`.
-
-* **shape_param_inc.csv** - code for Section 4: .csv file containing matrix of shape parameters to define PRO-nAE burden score simualation scenarios.
-
-* **rate_param_inc.csv** - code for Section 4: .csv file containing rate parameter to define PRO-nAE burden score simualation scenarios.
-
-* **fig3_data.csv** - 1,000 posterior samples of probability of response and PRO-nAE burden score for each dose used to create Figure 3 in the main manuscript. 
+* **efftox_sim.R** - code for Section 4.2: code required to run Eff+Tox-CRM simulation studies. Functions required to run this code are defined in `efftox_functions.R`.
