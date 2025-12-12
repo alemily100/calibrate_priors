@@ -51,19 +51,41 @@ for (i in 1:9){
   dimnames(sim)[[1]]<- c("Probability of clinician DLT", "Probability of patient DLT", "Probability recommended as MTD")
   all_sim<-rbind.data.frame(all_sim, sim)
 #  print(all_sim)
-  write.csv(all_sim, paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal/clay", phi,".", ncohort,".", cohortsize,".csv"))
-  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
-  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
-  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
+  write.csv(all_sim, paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi,".", ncohort,".", cohortsize,".csv"))
+  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
+  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
+  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
 }
-
-############################################# New uninformative prior - add correlation between C-DLT and P-DLT #######################################################
 
 skeletonc<- eval(parse(text=paste0("n", ncohort, ".c")))
 skeletonp<- eval(parse(text=paste0("n", ncohort, ".p")))
 clin<-exp(crmsens(prior=skeletonc, target=0.25, model = "empiric")$Hset)
 pat<- exp(crmsens(prior=skeletonp, target=0.35, model = "empiric")$Hset)
 
+cdlt_param<-optim(par=c(1,1), KL_marg, no.d=5, Hset=clin, lower=c(0, 0), upper=c(10,10), method="L-BFGS-B")$par
+pdlt_param<-optim(par=c(1,1), KL_marg, no.d=5, Hset=pat, lower=c(0, 0), upper=c(10,10), method="L-BFGS-B")$par
+
+print(cdlt_param)
+print(pdlt_param)
+
+for (i in 1:8){
+  clin_true_tox<- as.numeric(true_tox_clin[i,])
+  pat_true_tox<- as.numeric(true_tox_pro[i,])
+  prob_dlt<-procrm.sim_gamma(clin_true_tox,pat_true_tox,skeletonc ,skeletonp,cdlt_param[1],cdlt_param[2],pdlt_param[1], pdlt_param[2],targetc,targetp,cohortsize,ncohort,n.stop,start,cl,ntrial, phi)
+  sim<-rbind.data.frame(clin_true_tox, pat_true_tox, prob_dlt[[1]])
+  dimnames(sim)[[2]]<- c( "1","2", "3", "4", "5")
+  dimnames(sim)[[1]]<- c("Probability of clinician DLT", "Probability of patient DLT", "Probability recommended as MTD")
+  all_sim<-rbind.data.frame(all_sim, sim)
+  #  print(all_sim)
+  write.csv(all_sim, paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay",phi,".", ncohort, ".", cohortsize, ".csv"))
+  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
+  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
+  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
+}
+
+
+
+############################################# New uninformative prior - add correlation between C-DLT and P-DLT #######################################################
 
 #choose priors which lead to uninformative a priori dose selection  
 rate<- seq(from=0, to =2, length.out=100)

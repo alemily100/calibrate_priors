@@ -174,6 +174,48 @@ procrm.sim<-function(truthc,truthp,skeletonc,skeletonp,sc,sp,targetc,targetp,coh
   return(list(colMeans(dose.select), yc,yp, n))
 }
 
+########################### mu_k_marg #######################################
+#Description: estimated probability a dose is the MTD for marginal PRO-CRM dose recommendation using gamma prior
+
+#Input: 
+#mtd - dose of interest 
+#shape - shape hyperparameter for DLT parameter 
+#rate - rate hyperparameter for DLT parameter 
+#no.dose - number of doses under investigation 
+#Hset - matrix of the H-sets for DLT parameter
+
+#Output: numeric probability specified dose is the MTD
+
+mu_k_marg<-function(mtd, shape, rate, no.doses, Hset){
+  if(mtd==1){
+    return(pgamma(Hset[mtd,2], shape, rate))
+  }
+  if(mtd==no.doses){
+    return(1-pgamma(Hset[mtd,1], shape, rate))
+  }
+  if(mtd>1 && mtd < no.doses){
+    return(pgamma(Hset[mtd,2], shape, rate)-pgamma(Hset[mtd,1], shape, rate))
+  }
+}
+
+
+########################### KL_marg #######################################
+#Description: KL divergence of a priori MTD probabilities and discrete uniform distribution for marginal PRO-CRM dose recommendation using a gamma prior 
+
+#Input: 
+#vec - vector containing DLT shape and rate parameter 
+#no.dose - number of doses under investigation 
+#Hset - matrix of the H-sets for DLT parameter
+
+#Output: numeric KL divergence 
+
+KL_marg<- function(vec, no.d, Hset){
+  shape<-vec[1]
+  rate<- vec[2]
+  kl<-sum(sapply(1:5, function(k) mu_k_marg(k,shape, rate, no.d, Hset)*log(no.d*mu_k_marg(k,shape, rate, no.d, Hset))))
+  return(kl)
+}
+
 ########################### mu_k #######################################
 #Description: estimated probability a dose is the MTD for joint PRO-CRM dose recommendation 
 
