@@ -32,7 +32,7 @@ true_tox_clin<- rbind.data.frame(c(0.01, 0.02, 0.05, 0.10, 0.25), c(0.02, 0.05, 
 dimnames(true_tox_clin)[[2]]<- c( "1","2", "3", "4", "5")
 dimnames(true_tox_clin)[[1]]<- c("CLIN: Sc 1", "CLIN: Sc 2", "CLIN: Sc 3", "CLIN: Sc 4", "CLIN: Sc 5", "CLIN: Sc 6")                       
 
-true_tox_pro<- rbind.data.frame(c(0.04, 0.09, 0.017, 0.20, 0.35), c(0.09, 0.17, 0.20, 0.35, 0.50), c(0.17, 0.20, 0.35, 0.50, 0.65),
+true_tox_pro<- rbind.data.frame(c(0.04, 0.09, 0.17, 0.20, 0.35), c(0.09, 0.17, 0.20, 0.35, 0.50), c(0.17, 0.20, 0.35, 0.50, 0.65),
                                 c(0.20, 0.35, 0.50, 0.65, 0.80), c(0.35, 0.50, 0.65, 0.80, 0.85), c(0.5, 0.65, 0.80, 0.85, 0.90))
 dimnames(true_tox_pro)[[2]]<- c( "1","2", "3", "4", "5")
 dimnames(true_tox_pro)[[1]]<- c("PAT: Sc 1", "PAT: Sc 2", "PAT: Sc 3", "PAT: Sc 4", "PAT: Sc 5", "PAT: Sc 6")   
@@ -51,9 +51,9 @@ for (i in 1:6){
   all_sim<-rbind.data.frame(all_sim, sim)
 #  print(all_sim)
   write.csv(all_sim, paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi,".", ncohort,".", cohortsize,".csv"))
-  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
-  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
-  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
+  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".csv"))
+  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
+  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
   }
 }
 
@@ -79,9 +79,9 @@ for (i in 1:6){
   all_sim<-rbind.data.frame(all_sim, sim)
   #  print(all_sim)
   write.csv(all_sim, paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay",phi,".", ncohort, ".", cohortsize, ".csv"))
-  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
-  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
-  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
+  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".csv"))
+  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
+  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
   }
 }
 
@@ -137,9 +137,9 @@ for (i in 1:6){
   all_sim<-rbind.data.frame(all_sim, sim)
 #  print(all_sim)
   write.csv(all_sim, paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay",phi,".", ncohort, ".", cohortsize, ".csv"))
-  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
-  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
-  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
+  write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".csv"))
+  write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
+  write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", j, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
   }
 }
 
