@@ -35,7 +35,7 @@ dimnames(true_tox_clin)[[1]]<- c("CLIN: Sc 1", "CLIN: Sc 2", "CLIN: Sc 3", "CLIN
 true_tox_pro<- rbind.data.frame(c(0.04, 0.09, 0.17, 0.20, 0.25), c(0.09, 0.17, 0.20, 0.25, 0.35), c(0.17, 0.20, 0.25, 0.35, 0.50),
                                 c(0.20, 0.25, 0.35, 0.50, 0.65), c(0.25, 0.35, 0.50, 0.65, 0.80), c(0.35, 0.5, 0.65, 0.80, 0.85))
 dimnames(true_tox_pro)[[2]]<- c( "1","2", "3", "4", "5")
-dimnames(true_tox_pro)[[1]]<- c("PAT: Sc 1", "PAT: Sc 2", "PAT: Sc 3", "PAT: Sc 4", "PAT: Sc 5", "PAT: Sc 6", "PAT: Sc 7")   
+dimnames(true_tox_pro)[[1]]<- c("PAT: Sc 1", "PAT: Sc 2", "PAT: Sc 3", "PAT: Sc 4", "PAT: Sc 5", "PAT: Sc 6")   
 
 all_sim<- NULL
 set.seed(1001)
