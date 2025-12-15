@@ -27,24 +27,23 @@ skeletonp<- eval(parse(text=paste0("n", ncohort, ".p")))
 sc<- eval(parse(text=paste0("sc.", ncohort)))
 sp<- eval(parse(text=paste0("sp.", ncohort)))
 
-true_tox_clin<- rbind.data.frame(c(0.05, 0.05, 0.25, 0.4, 0.55), c(0.05, 0.25, 0.40, 0.55, 0.7), c(0.01, 0.02, 0.05, 0.10, 0.25),
-                                 c(0.02, 0.05, 0.1, 0.25, 0.4), c(0.05, 0.1, 0.16, 0.25, 0.4), c(0.05, 0.18, 0.2, 0.25, 0.4),
-                                 c(0.01, 0.05, 0.1, 0.16, 0.25),c(0.25, 0.40, 0.55, 0.7, 0.8), c(0.45, 0.50, 0.55, 0.7, 0.8))
+true_tox_clin<- rbind.data.frame(c(0.01, 0.02, 0.05, 0.10, 0.25), c(0.02, 0.05, 0.10, 0.25, 0.4), c(0.05, 0.10, 0.25, 0.40, 0.55),
+                                 c(0.10, 0.25, 0.40, 0.55, 0.70), c(0.25, 0.40, 0.55, 0.60, 0.80), c(0.40, 0.55, 0.70, 0.80, 0.90))
 dimnames(true_tox_clin)[[2]]<- c( "1","2", "3", "4", "5")
-dimnames(true_tox_clin)[[1]]<- c("Sc 1", "Sc 2", "Sc 3", "Sc 4", "Sc 5", "Sc 6", "Sc 7", "Sc 8", "Sc 9")                       
+dimnames(true_tox_clin)[[1]]<- c("CLIN: Sc 1", "CLIN: Sc 2", "CLIN: Sc 3", "CLIN: Sc 4", "CLIN: Sc 5", "CLIN: Sc 6")                       
 
-true_tox_pro<- rbind.data.frame(c(0.17, 0.18, 0.35, 0.50, 0.65), c(0.1, 0.15, 0.35, 0.5, 0.65), c(0.04, 0.09, 0.17, 0.2, 0.35),
-                                c(0.09, 0.17, 0.2, 0.35, 0.5), c(0.05, 0.2, 0.35, 0.5, 0.65), c(0.17, 0.35, 0.5, 0.65, 0.8),
-                                c(0.04, 0.05, 0.2, 0.35, 0.5),c(0.35, 0.5, 0.65, 0.8, 0.85), c(0.55, 0.6, 0.65, 0.8, 0.85))
+true_tox_pro<- rbind.data.frame(c(0.04, 0.09, 0.017, 0.20, 0.35), c(0.09, 0.17, 0.20, 0.35, 0.50), c(0.17, 0.20, 0.35, 0.50, 0.65),
+                                c(0.20, 0.35, 0.50, 0.65, 0.80), c(0.35, 0.50, 0.65, 0.80, 0.85), c(0.5, 0.65, 0.80, 0.85, 0.90))
 dimnames(true_tox_pro)[[2]]<- c( "1","2", "3", "4", "5")
-dimnames(true_tox_pro)[[1]]<- c("Sc 1", "Sc 2", "Sc 3", "Sc 4", "Sc 5", "Sc 6", "Sc 7","Sc 8", "Sc 9")   
+dimnames(true_tox_pro)[[1]]<- c("PAT: Sc 1", "PAT: Sc 2", "PAT: Sc 3", "PAT: Sc 4", "PAT: Sc 5", "PAT: Sc 6")   
 
 all_sim<- NULL
 set.seed(1001)
-ntrial=5000
-for (i in 1:9){
+ntrial=1250
+for (i in 1:6){
+  for(j in 1:6){
   clin_true_tox<- as.numeric(true_tox_clin[i,])
-  pat_true_tox<- as.numeric(true_tox_pro[i,])
+  pat_true_tox<- as.numeric(true_tox_pro[j,])
   prob_dlt<-procrm.sim(clin_true_tox,pat_true_tox,skeletonc,skeletonp,sc,sp,targetc,targetp,cohortsize,ncohort,n.stop,start,cl,ntrial, phi)
   sim<-rbind.data.frame(clin_true_tox, pat_true_tox, prob_dlt[[1]])
   dimnames(sim)[[2]]<- c( "1","2", "3", "4", "5")
@@ -55,6 +54,7 @@ for (i in 1:9){
   write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
   write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
   write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_lognormal/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
+  }
 }
 
 skeletonc<- eval(parse(text=paste0("n", ncohort, ".c")))
@@ -67,10 +67,11 @@ pdlt_param<-optim(par=c(1,1), KL_marg, no.d=5, Hset=pat, lower=c(0, 0), upper=c(
 
 print(cdlt_param)
 print(pdlt_param)
-
-for (i in 1:8){
+all_sim<- NULL
+for (i in 1:6){
+  for(j in 1:6){
   clin_true_tox<- as.numeric(true_tox_clin[i,])
-  pat_true_tox<- as.numeric(true_tox_pro[i,])
+  pat_true_tox<- as.numeric(true_tox_pro[j,])
   prob_dlt<-procrm.sim_gamma(clin_true_tox,pat_true_tox,skeletonc ,skeletonp,cdlt_param[1],cdlt_param[2],pdlt_param[1], pdlt_param[2],targetc,targetp,cohortsize,ncohort,n.stop,start,cl,ntrial, phi)
   sim<-rbind.data.frame(clin_true_tox, pat_true_tox, prob_dlt[[1]])
   dimnames(sim)[[2]]<- c( "1","2", "3", "4", "5")
@@ -81,6 +82,7 @@ for (i in 1:8){
   write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
   write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
   write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/marginal_gamma/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
+  }
 }
 
 
@@ -112,7 +114,7 @@ all_sim<- NULL
 estc<-NULL
 estp<-NULL
 set.seed(1001)
-ntrial<-5000
+ntrial<-1250
 cohortsize=3      ##cohort size for each inclusion
 n.stop=ncohort
 phi<- 0.9
@@ -124,9 +126,10 @@ eval(parse(text=paste0("bc<-bc.",ncohort)))
 eval(parse(text=paste0("ap<-ap.",ncohort)))
 eval(parse(text=paste0("bp<-bp.",ncohort)))
 
-for (i in 1:8){
+for (i in 1:6){
+  for(j in 1:6){
   clin_true_tox<- as.numeric(true_tox_clin[i,])
-  pat_true_tox<- as.numeric(true_tox_pro[i,])
+  pat_true_tox<- as.numeric(true_tox_pro[j,])
   prob_dlt<-procrm.sim_gamma(clin_true_tox,pat_true_tox,skeletonc ,skeletonp,ac,bc, ap, bp,targetc,targetp,cohortsize,ncohort,n.stop,start,cl,ntrial, phi)
   sim<-rbind.data.frame(clin_true_tox, pat_true_tox, prob_dlt[[1]])
   dimnames(sim)[[2]]<- c( "1","2", "3", "4", "5")
@@ -137,5 +140,6 @@ for (i in 1:8){
   write.csv(prob_dlt[[4]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".csv"))
   write.csv(prob_dlt[[2]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".cdlt.csv"))
   write.csv(prob_dlt[[3]], paste0("/home/ealger/revision_calibrate_priors/results/procrm_results/joint/clay", phi, ".sim", i, ".", ncohort, ".", cohortsize, ".pdlt.csv"))
+  }
 }
 
