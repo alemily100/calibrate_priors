@@ -17,7 +17,7 @@ sc.39<- 0.632**2
 sp.39<- 0.696**2
 
 cohortsize=3     ##cohort size for each inclusion
-ncohort=39        ##number of cohorts
+ncohort=18        ##number of cohorts
 n.stop=ncohort          ##Number of patients needed on one combination to stop the trial
 cl=0.9999         ##confidence level for the confidence interval
 phi<- 0.9
@@ -28,7 +28,7 @@ sc<- eval(parse(text=paste0("sc.", ncohort)))
 sp<- eval(parse(text=paste0("sp.", ncohort)))
 
 true_tox_clin<- rbind.data.frame(c(0.01, 0.02, 0.05, 0.10, 0.20), c(0.02, 0.05, 0.10, 0.20, 0.25), c(0.05, 0.10, 0.20, 0.25, 0.40),
-                                 c(0.10, 0.20, 0.25, 0.40, 0.55), c(0.20, 0.25, 0.40, 0.55, 0.70), c(0.25, 0.40, 0.55, 0.70, 80))
+                                 c(0.10, 0.20, 0.25, 0.40, 0.55), c(0.20, 0.25, 0.40, 0.55, 0.70), c(0.25, 0.40, 0.55, 0.70, 0.80))
 dimnames(true_tox_clin)[[2]]<- c( "1","2", "3", "4", "5")
 dimnames(true_tox_clin)[[1]]<- c("CLIN: Sc 1", "CLIN: Sc 2", "CLIN: Sc 3", "CLIN: Sc 4", "CLIN: Sc 5", "CLIN: Sc 6")                       
 
