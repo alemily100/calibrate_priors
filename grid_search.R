@@ -27,11 +27,11 @@ pat<- exp(crmsens(prior=skeletonp, target=0.35, model = "empiric")$Hset)
 
 KL_grid<- function(b_shape,b_rate, g_shape, g_rate, prior_vec){
   no.d<-5
-  clin_param<-rgamma(100,b_shape,b_rate)
-  pat_param<-rgamma(100, g_shape, g_rate)
-  clin_rec<-sapply(1:100, function (k) which.min(abs(skeletonc^clin_param[k]-0.25)))
-  pat_rec<-sapply(1:100, function (k) which.min(abs(skeletonp^pat_param[k]-0.35)))
-  proposal<-table(pmin(clin_rec, pat_rec))/100
+  clin_param<-rgamma(1000,b_shape,b_rate)
+  pat_param<-rgamma(1000, g_shape, g_rate)
+  clin_rec<-sapply(1:1000, function (k) which.min(abs(skeletonc^clin_param[k]-0.25)))
+  pat_rec<-sapply(1:1000, function (k) which.min(abs(skeletonp^pat_param[k]-0.35)))
+  proposal<-table(pmin(clin_rec, pat_rec))/1000
   kl<-sum(sapply(1:5, function(k) proposal[k]*log((1/prior_vec[k])*proposal[k])))
   return(kl)
 }
@@ -91,8 +91,8 @@ colnames(collect_results)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape",
 set.seed(1001)
 for(m in sc:sc){
   j<-m
-  start_time_grid <- Sys.time()
   prior_vec<-prior_mat[j,]
+  t.grid<-system.time(
   param_grid$score <- mapply(
     KL_grid,
     param_grid$Var1,
@@ -101,9 +101,8 @@ for(m in sc:sc){
     param_grid$Var4,
     MoreArgs = list(prior_vec = prior_vec)
   )
-  end_time_grid <- Sys.time()
-  run_time_grid <- as.numeric(end_time_grid - start_time_grid)
-  
+  )
+  run_time_grid <- as.numeric(t.grid["elapsed"])
   # Best parameters
   best_params <- param_grid[which.min(param_grid$score), ]
   input<-unlist(best_params)
@@ -114,15 +113,14 @@ for(m in sc:sc){
   ### optimisation in paper  
   rate<- seq(from=0, to =2, length.out=100)
   l <- data.frame(ac=NULL,ap=NULL, bc=NULL, bp=NULL, comb_div=NULL, clin_div=NULL, pat_div=NULL)
-  start_time_opt <-Sys.time() 
+  t.opt<-system.time(
   for(i in 1:100){
     nm<-optim(par=c(1,1,1,1), KL, no.d=5, Hset_b=clin, Hset_g=pat, prior_vec=prior_vec, lower=c(0,0.1,0,rate[i]), upper=c(10,10,10,rate[i]+0.01), method="L-BFGS-B")
     l<-rbind(l, data.frame(ac=nm$par[1],ap=nm$par[2],
                            bc=nm$par[3],bp=nm$par[4],comb_div=nm$value, clin_div=KL_marginal(nm$par[1],nm$par[3], 5, clin), pat_div=KL_marginal(nm$par[2],nm$par[4], 5, pat)))
-  }
+  })
   best<-l[which.min(abs(l[,6]-l[,7])),]
-  end_time_opt <- Sys.time()
-  run_time_opt <- as.numeric(end_time_opt - start_time_opt)
+  run_time_opt <- as.numeric(t.opt["elapsed"])
   collect_results[2,]<-c("opt", j, unlist(c(best[1], best[3], best[2], best[4], best[5])), run_time_opt)
   write.csv(collect_results, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch/sc",j,".csv"))
 }
