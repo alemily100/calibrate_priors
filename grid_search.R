@@ -66,15 +66,6 @@ mu_marginal<-function(mtd, shape, rate, no.d, Hset){
   }
 }
 
-c.shape<- seq(from=0.01, to =3, length.out=100)
-c.rate<- seq(from=0.01, to =3, length.out=100)
-p.shape<- seq(from=0.01, to =3, length.out=100)
-p.rate<- seq(from=0.01, to =3, length.out=100)
-
-param_grid <- expand.grid(
-  c.shape, c.rate, p.shape, p.rate
-)
-
 
 KL<- function(vec, no.d, Hset_b, Hset_g, prior_vec){
   b_shape<-vec[1]
@@ -85,13 +76,26 @@ KL<- function(vec, no.d, Hset_b, Hset_g, prior_vec){
   return(kl)
 }
 
-collect_results<-matrix(nrow=2, ncol=8)
-colnames(collect_results)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
+collect_results_grid<-matrix(nrow=5, ncol=8)
+colnames(collect_results_grid)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
 
+collect_results_optim<-matrix(nrow=5, ncol=8)
+colnames(collect_results_optim)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
+
+to_explore_grid<-c(2,3, 5, 10, 15, 20) 
+to_explore_optim<-c(5, 16,20,25,50,75)
 set.seed(1001)
 for(m in sc:sc){
   j<-m
+  for(length in 1:length(to_explore_grid)){
   prior_vec<-prior_mat[j,]
+  c.shape<- seq(from=0.01, to =3, length.out=to_explore_grid[length])
+  c.rate<- seq(from=0.01, to =3, length.out=to_explore_grid[length])
+  p.shape<- seq(from=0.01, to =3, length.out=to_explore_grid[length])
+  p.rate<- seq(from=0.01, to =3, length.out=to_explore_grid[length])
+  param_grid <- expand.grid(
+    c.shape, c.rate, p.shape, p.rate
+  )
   t.grid<-system.time(
   param_grid$score <- mapply(
     KL_grid,
@@ -108,20 +112,26 @@ for(m in sc:sc){
   input<-unlist(best_params)
   if(length(unlist(best_params))==0){
     input<-rep(NA, times=5)}
-  collect_results[1,]<-c("grid", j, input, run_time_grid)
-  
+  collect_results_grid[length,]<-c("grid", j, input, run_time_grid)
+  write.csv(collect_results_grid, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch/grid.sc",j,".csv"))
+  }
+  for(max.fn in to_explore_optim){
   ### optimisation in paper  
   rate<- seq(from=0, to =2, length.out=100)
   l <- data.frame(ac=NULL,ap=NULL, bc=NULL, bp=NULL, comb_div=NULL, clin_div=NULL, pat_div=NULL)
+  start_par <- c(1,1,1,1)
   t.opt<-system.time(
-  for(i in 1:100){
-    nm<-optim(par=c(1,1,1,1), KL, no.d=5, Hset_b=clin, Hset_g=pat, prior_vec=prior_vec, lower=c(0,0.1,0,rate[i]), upper=c(10,10,10,rate[i]+0.01), method="L-BFGS-B")
-    l<-rbind(l, data.frame(ac=nm$par[1],ap=nm$par[2],
-                           bc=nm$par[3],bp=nm$par[4],comb_div=nm$value, clin_div=KL_marginal(nm$par[1],nm$par[3], 5, clin), pat_div=KL_marginal(nm$par[2],nm$par[4], 5, pat)))
-  })
-  best<-l[which.min(abs(l[,6]-l[,7])),]
+  nm <- nlminb(
+      start = start_par,
+      objective = KL,
+      lower = c(0, 0.1, 0, rate[i]),
+      upper = c(10, 10, 10, rate[i] + 0.01),
+      control = list(iter.max = max.fn,eval.max = 5000, rel.tol = 1e-8),
+      no.d = 5,Hset_b = clin,Hset_g = pat,prior_vec = prior_vec)
+  )
   run_time_opt <- as.numeric(t.opt["elapsed"])
-  collect_results[2,]<-c("opt", j, unlist(c(best[1], best[3], best[2], best[4], best[5])), run_time_opt)
-  write.csv(collect_results, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch/sc",j,".csv"))
+  collect_results_optim[which(max.fn == to_explore_optim),]<-c("opt", j, unlist(nm$par), nm$objective, run_time_opt)
+  write.csv(collect_results_optim, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch/optim.sc",j,".csv"))
+  }
 }
 
