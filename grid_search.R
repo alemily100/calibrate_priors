@@ -76,24 +76,24 @@ KL<- function(vec, no.d, Hset_b, Hset_g, prior_vec){
   return(kl)
 }
 
-to_explore_grid<-c(2,3, 5, 10, 15, 20) 
+to_explore_grid<-c(2,3,4,5,6, 7, 8, 9, 10) 
 to_explore_optim<-c(5, 16,20,25,50,75)
 
 collect_results_grid<-matrix(nrow=length(to_explore_grid), ncol=8)
-colnames(collect_results_grid)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
+colnames(collect_results_grid)<-c("n.functions" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
 
 collect_results_optim<-matrix(nrow=length(to_explore_optim), ncol=8)
-colnames(collect_results_optim)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
+colnames(collect_results_optim)<-c("n.functions" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
 
 set.seed(1001)
 for(m in sc:sc){
   j<-m
   for(length in 1:length(to_explore_grid)){
   prior_vec<-prior_mat[j,]
-  c.shape<- seq(from=0.01, to =3, length.out=to_explore_grid[length])
-  c.rate<- seq(from=0.01, to =3, length.out=to_explore_grid[length])
-  p.shape<- seq(from=0.01, to =3, length.out=to_explore_grid[length])
-  p.rate<- seq(from=0.01, to =3, length.out=to_explore_grid[length])
+  c.shape<- seq(from=0.01, to =10, length.out=to_explore_grid[length])
+  c.rate<- seq(from=0.01, to =10, length.out=to_explore_grid[length])
+  p.shape<- seq(from=0.01, to =10, length.out=to_explore_grid[length])
+  p.rate<- seq(from=0.01, to =10, length.out=to_explore_grid[length])
   param_grid <- expand.grid(
     c.shape, c.rate, p.shape, p.rate
   )
@@ -113,7 +113,7 @@ for(m in sc:sc){
   input<-unlist(best_params)
   if(length(unlist(best_params))==0){
     input<-rep(NA, times=5)}
-  collect_results_grid[length,]<-c("grid", j, input, run_time_grid)
+  collect_results_grid[length,]<-c((to_explore_grid[length])^4, j, input, run_time_grid)
   write.csv(collect_results_grid, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch/grid.sc",j,".csv"))
   }
   for(max.fn in to_explore_optim){
@@ -135,7 +135,7 @@ for(m in sc:sc){
   })
   best<-l[which.min(l[,5]),]
   run_time_opt <- as.numeric(t.opt["elapsed"])
-  collect_results_optim[which(max.fn == to_explore_optim),]<-c("opt", j, unlist(c(best[1], best[3], best[2], best[4], best[5])), run_time_opt)
+  collect_results_optim[which(max.fn == to_explore_optim),]<-c(max.fn, j, unlist(c(best[1], best[3], best[2], best[4], best[5])), run_time_opt)
   write.csv(collect_results_optim, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch/optim.sc",j,".csv"))
   }
 }
