@@ -76,14 +76,15 @@ KL<- function(vec, no.d, Hset_b, Hset_g, prior_vec){
   return(kl)
 }
 
-collect_results_grid<-matrix(nrow=5, ncol=8)
-colnames(collect_results_grid)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
-
-collect_results_optim<-matrix(nrow=5, ncol=8)
-colnames(collect_results_optim)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
-
 to_explore_grid<-c(2,3, 5, 10, 15, 20) 
 to_explore_optim<-c(5, 16,20,25,50,75)
+
+collect_results_grid<-matrix(nrow=length(to_explore_grid), ncol=8)
+colnames(collect_results_grid)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
+
+collect_results_optim<-matrix(nrow=length(to_explore_optim), ncol=8)
+colnames(collect_results_optim)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
+
 set.seed(1001)
 for(m in sc:sc){
   j<-m
@@ -121,6 +122,7 @@ for(m in sc:sc){
   l <- data.frame(ac=NULL,ap=NULL, bc=NULL, bp=NULL, comb_div=NULL, clin_div=NULL, pat_div=NULL)
   start_par <- c(1,1,1,1)
   t.opt<-system.time(
+  for(i in 1:100){
   nm <- nlminb(
       start = start_par,
       objective = KL,
@@ -128,9 +130,12 @@ for(m in sc:sc){
       upper = c(10, 10, 10, rate[i] + 0.01),
       control = list(iter.max = max.fn,eval.max = 5000, rel.tol = 1e-8),
       no.d = 5,Hset_b = clin,Hset_g = pat,prior_vec = prior_vec)
-  )
+  l<-rbind(l, data.frame(ac=nm$par[1],ap=nm$par[2],
+                         bc=nm$par[3],bp=nm$par[4],comb_div=nm$objective, clin_div=KL_marginal(nm$par[1],nm$par[3], 5, clin), pat_div=KL_marginal(nm$par[2],nm$par[4], 5, pat)))
+  })
+  best<-l[which.min(l[,5]),]
   run_time_opt <- as.numeric(t.opt["elapsed"])
-  collect_results_optim[which(max.fn == to_explore_optim),]<-c("opt", j, unlist(nm$par), nm$objective, run_time_opt)
+  collect_results_optim[which(max.fn == to_explore_optim),]<-c("opt", j, unlist(c(best[1], best[3], best[2], best[4], best[5])), run_time_opt)
   write.csv(collect_results_optim, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch/optim.sc",j,".csv"))
   }
 }
