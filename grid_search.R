@@ -76,8 +76,8 @@ KL<- function(vec, no.d, Hset_b, Hset_g, prior_vec){
   return(kl)
 }
 
-to_explore_grid<-c(2,3,4,5,6, 7, 8, 9, 10) 
-to_explore_optim<-c(5, 16,20,25,50,75)
+to_explore_grid<-c(1,2,3,4,5,6,7,8,9,10) 
+to_explore_optim<-c(1,2, 3, 4,5,16,20,25,50,75,10000)
 
 collect_results_grid<-matrix(nrow=length(to_explore_grid), ncol=8)
 colnames(collect_results_grid)<-c("n.functions" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
