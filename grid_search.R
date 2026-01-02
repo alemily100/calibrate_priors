@@ -1,4 +1,16 @@
 setwd("/home/ealger/revision_calibrate_priors")
+
+#args <- commandArgs(trailingOnly=TRUE)
+#sc<-args[1]
+
+sc <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID"))
+
+if (is.na(sc)) {
+  stop("SLURM_ARRAY_TASK_ID is not set or not numeric")
+}
+
+message("Running scenario ", sc)
+
 library(dfcrm)
 sc1<- c(0.35, 0.30, 0.20, 0.10, 0.05)
 sc2<- c(0.10, 0.15, 0.20, 0.25, 0.30)
@@ -6,10 +18,6 @@ sc3<- c(0.10, 0.20, 0.40, 0.20, 0.10)
 sc4<- c(0.20, 0.20, 0.20, 0.20, 0.20)
 
 prior_mat<- rbind(sc1, sc2, sc3, sc4)
-
-collect_results<-matrix(nrow=8, ncol=8)
-colnames(collect_results)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
-
 
 
 skeletonc<- c(0.06, 0.14, 0.25, 0.38, 0.50)
@@ -58,10 +66,10 @@ mu_marginal<-function(mtd, shape, rate, no.d, Hset){
   }
 }
 
-c.shape<- seq(from=0.01, to =3, length.out=2)
-c.rate<- seq(from=0.01, to =3, length.out=2)
-p.shape<- seq(from=0.01, to =3, length.out=2)
-p.rate<- seq(from=0.01, to =3, length.out=2)
+c.shape<- seq(from=0.01, to =3, length.out=100)
+c.rate<- seq(from=0.01, to =3, length.out=100)
+p.shape<- seq(from=0.01, to =3, length.out=100)
+p.rate<- seq(from=0.01, to =3, length.out=100)
 
 param_grid <- expand.grid(
   c.shape, c.rate, p.shape, p.rate
@@ -76,8 +84,13 @@ KL<- function(vec, no.d, Hset_b, Hset_g, prior_vec){
   kl<-sum(sapply(1:5, function(k) mu_k(k,b_shape, g_shape,b_rate,g_rate, no.d, Hset_b, Hset_g)*log((1/prior_vec[k])*mu_k(k,b_shape, g_shape,b_rate,g_rate, no.d, Hset_b, Hset_g))))
   return(kl)
 }
+
+collect_results<-matrix(nrow=2, ncol=8)
+colnames(collect_results)<-c("type" ,"scenario", "C_shape", "C_rate", "P_shape", "P_rate", "divergence", "time_to_run")
+
 set.seed(1001)
-for(j in 1:4){
+for(m in sc:sc){
+  j<-m
   start_time_grid <- Sys.time()
   prior_vec<-prior_mat[j,]
   param_grid$score <- mapply(
@@ -96,7 +109,7 @@ for(j in 1:4){
   input<-unlist(best_params)
   if(length(unlist(best_params))==0){
     input<-rep(NA, times=5)}
-  collect_results[(j*2)-1,]<-c("grid", j, input, run_time_grid)
+  collect_results[1,]<-c("grid", j, input, run_time_grid)
   
   ### optimisation in paper  
   rate<- seq(from=0, to =2, length.out=100)
@@ -110,6 +123,7 @@ for(j in 1:4){
   best<-l[which.min(abs(l[,6]-l[,7])),]
   end_time_opt <- Sys.time()
   run_time_opt <- as.numeric(end_time_opt - start_time_opt)
-  collect_results[(j*2),]<-c("opt", j, unlist(c(best[1], best[3], best[2], best[4], best[5])), run_time_opt)
+  collect_results[2,]<-c("opt", j, unlist(c(best[1], best[3], best[2], best[4], best[5])), run_time_opt)
+  write.csv(collect_results, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch/sc",j,".csv"))
 }
-write.csv(collect_results, paste0("/home/ealger/revision_calibrate_priors/results/gridsearch.csv"))
+
