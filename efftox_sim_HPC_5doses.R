@@ -234,7 +234,7 @@ for (i in 1:6){
       setwd("/home/ealger/revision_calibrate_priors")
       source("efftox_functions_5doses.R")
     }))
-    clusterExport(cl, c("ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","cdlt_param","targetc","cohortsize","rar.prop", "ntrial"))
+    clusterExport(cl, c("se","ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","cdlt_param","targetc","cohortsize","rar.prop", "ntrial"))
     result<-parLapply(cl, 1:ntrial, function (k) efftoxcrm.uninf.N(clin_true,eff_true, prior.eff.model, skeletonc,mat_skeletone,cdlt_param[1], cdlt_param[2],se,targetc,0.2, cohortsize,ncohort,rar.prop))
     stopCluster(cl)
     for(m in 1:ntrial){
