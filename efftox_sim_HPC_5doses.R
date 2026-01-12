@@ -45,7 +45,7 @@ clin <- exp(crmsens(skeletonc, target=0.25, model="empiric", detail=TRUE)$Hset)
 for(i in 1:100){
   nm<-optim(par=c(1,1), KLja, l_shape=alpha[i], l_rate=l_rate, no.d=no.d, Hset_b=clin,lower=c(0,0.1), upper=c(10,10), method="L-BFGS-B")
   l.df<-rbind(l.df, data.frame(b_shape=nm$par[1],b_rate=nm$par[2],
-                               l_alpha=alpha[i],l_beta=l_rate,comb_div=nm$value, clin_div=KL_marginal(nm$par[1],nm$par[2], 5, clin),
+                               l_alpha=alpha[i],l_beta=l_rate,comb_div=nm$value, clin_div=KL_marginal(c(nm$par[1],nm$par[2]), 5, clin),
                                h_div=KL_marginal_h(alpha[i], l_rate,no.d)))
 }
 
@@ -100,7 +100,7 @@ for (i in 1:6){
       setwd("/home/ealger/revision_calibrate_priors")
       source("efftox_functions_5doses.R")
     }))
-    clusterExport(cl, c("clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","ac", "bc","targetc","cohortsize","rar.prop", "ntrial"))
+    clusterExport(cl, c("ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","ac", "bc","targetc","cohortsize","rar.prop", "ntrial"))
     result<-parLapply(cl, 1:ntrial, function (k) efftoxcrm.uninf(clin_true,eff_true, prior.eff.model, skeletonc,mat_skeletone,ac, bc,0.1,targetc,0.2, cohortsize,ncohort,rar.prop))
     stopCluster(cl)
     for(m in 1:ntrial){
@@ -144,7 +144,7 @@ for (i in 1:6){
     setwd("/home/ealger/revision_calibrate_priors")
     source("efftox_functions_5doses.R")
   }))
-  clusterExport(cl, c("clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","sc", "se","targetc","cohortsize","rar.prop", "ntrial"))
+  clusterExport(cl, c("ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","sc", "se","targetc","cohortsize","rar.prop", "ntrial"))
   result<-parLapply(cl, 1:ntrial, function (k) efftoxcrm(clin_true,eff_true, prior.eff.model, skeletonc,mat_skeletone,sc, se,targetc,0.2, cohortsize,ncohort,rar.prop))
   stopCluster(cl)
   for(m in 1:ntrial){
@@ -188,7 +188,7 @@ for (i in 1:6){
     setwd("/home/ealger/revision_calibrate_priors")
     source("efftox_functions_5doses.R")  
   }))
-  clusterExport(cl, c("clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","sc", "se","targetc","cohortsize","rar.prop", "ntrial"))
+  clusterExport(cl, c("ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","sc", "se","targetc","cohortsize","rar.prop", "ntrial"))
   result<-parLapply(cl, 1:ntrial, function (k) efftoxcrm.HN(clin_true,eff_true, prior.eff.model, skeletonc,mat_skeletone,sc, se,targetc,0.2, cohortsize,ncohort,rar.prop))
   stopCluster(cl)
   for(m in 1:ntrial){
@@ -234,7 +234,7 @@ for (i in 1:6){
       setwd("/home/ealger/revision_calibrate_priors")
       source("efftox_functions_5doses.R")
     }))
-    clusterExport(cl, c("clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","cdlt_param","targetc","cohortsize","rar.prop", "ntrial"))
+    clusterExport(cl, c("ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","cdlt_param","targetc","cohortsize","rar.prop", "ntrial"))
     result<-parLapply(cl, 1:ntrial, function (k) efftoxcrm.uninf.N(clin_true,eff_true, prior.eff.model, skeletonc,mat_skeletone,cdlt_param[1], cdlt_param[2],se,targetc,0.2, cohortsize,ncohort,rar.prop))
     stopCluster(cl)
     for(m in 1:ntrial){
@@ -275,7 +275,7 @@ for (i in 1:6){
       setwd("/home/ealger/revision_calibrate_priors")
       source("efftox_functions_5doses.R")
     }))
-    clusterExport(cl, c("clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","cdlt_param","targetc","cohortsize","rar.prop", "ntrial"))
+    clusterExport(cl, c("se", "ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","cdlt_param","targetc","cohortsize","rar.prop", "ntrial"))
     result<-parLapply(cl, 1:ntrial, function (k) efftoxcrm.uninf.N(clin_true,eff_true, prior.eff.model, skeletonc,mat_skeletone,cdlt_param[1], cdlt_param[2],se,targetc,0.2, cohortsize,ncohort,rar.prop))
     stopCluster(cl)
     for(m in 1:ntrial){
