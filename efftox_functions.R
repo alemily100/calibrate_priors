@@ -47,7 +47,9 @@ mu_marginal<-function(mtd, shape, rate, no.d, Hset){
   }
 }
 
-KL_marginal<- function(shape, rate, no.d, Hset){
+KL_marginal<- function(vec, no.d, Hset){
+  shape<-vec[1]
+  rate<- vec[2]
   kl<-sum(sapply(1:5, function(k) mu_marginal(k,shape, rate, no.d, Hset)*log(no.d*mu_marginal(k,shape, rate, no.d, Hset))))
   return(kl)
 }
