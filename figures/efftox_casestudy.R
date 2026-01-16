@@ -6,7 +6,10 @@ library(dfcrm)
 library(tidyverse)
 library(lattice)
 
+source("efftox_functions_5doses.R")
+
 setwd("C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors")
+
 
 KLja<- function(vec, l_shape,l_rate, no.d, Hset_b){
   prob_l<- c(pbeta(1/5, l_shape, l_rate),pbeta(2/5, l_shape, l_rate)-pbeta(1/5, l_shape, l_rate),pbeta(3/5, l_shape, l_rate)-pbeta(2/5, l_shape, l_rate),
@@ -56,9 +59,9 @@ wl<- function(sim_col){
   return(test)
 }
 
-true_tox_clin<- c(0.05, 0.05, 0.05, 0.05, 0.05)
+true_tox_clin<- c(0.01, 0.02, 0.05, 0.10, 0.20)
 
-true_eff<- c(0.05, 0.13, 0.25, 0.38, 0.5)
+true_eff<- c(0.13, 0.25, 0.38, 0.5, 0.63)
 #dimnames(true_eff)[[2]]<- c( "1","2", "3", "4", "5", "6")
 
 complete<-function(prior.eff.model, skeletonc,skeletone,sc,se,targetc,targete, cohortsize,ncohort,rar.prop, complete_responses){
@@ -229,7 +232,7 @@ eff8<- c(0.4, 0.5, rep(0.6, times=3))
 eff9<- c(0.3, 0.4, 0.5, rep(0.6, times=2))
 
 delta<- 0.05
-target<- 0.33
+target<- 0.25
 mtd<- 5
 alpha<- seq(from=0.5, to =4, length.out=100)
 l_rate<- 1
@@ -239,7 +242,7 @@ clin <- exp(crmsens(skeletonc, target=0.33, model="empiric", detail=TRUE)$Hset)
 for(i in 1:100){
   nm<-optim(par=c(1,1), KLja, l_shape=alpha[i], l_rate=l_rate, no.d=no.d, Hset_b=clin,lower=c(0,0.1), upper=c(10,10), method="L-BFGS-B")
   l.df<-rbind(l.df, data.frame(b_shape=nm$par[1],b_rate=nm$par[2],
-                               l_alpha=alpha[i],l_beta=l_rate,comb_div=nm$value, clin_div=KL_marginal(nm$par[1],nm$par[2], 5, clin),
+                               l_alpha=alpha[i],l_beta=l_rate,comb_div=nm$value, clin_div=KL_marginal(c(nm$par[1],nm$par[2]), 5, clin),
                                h_div=KL_marginal_h(alpha[i], l_rate,no.d)))
 }
 df <- data.frame(x = l.df$l_alpha,
@@ -255,38 +258,25 @@ mat_skeletone<- matrix(c(eff1, eff2, eff3, eff4, eff5, eff6, eff7, eff8,
                          eff9), nrow=9, byrow = TRUE)
 ac<- l.df[el,1]
 bc<- l.df[el,2]
-targetc<- 0.33
+targetc<- 0.25
 targete<- 0.2
 cohortsize<- 3
 ncohort<- 39
 rar.prop<- 0.25
 
-n<- 17010
 w<- 0:3
-set.seed(n)
+set.seed(17013)
 u_pat<-matrix(runif(3*ncohort), nrow=ncohort)
 table<-generate_table(10000, true_tox_clin,true_eff)
 complete_responses<-sapply(1:ncohort, function (m) sapply(1:5, function(k) patient_outcome(k, u_pat[m,], table)))
 set.seed(n)
-cal_wages<-uninf_complete(prior.eff.model, skeletonc,mat_skeletone,ac, bc,0.1,targetc,0.2, cohortsize,39,rar.prop, complete_responses)
-
-#uncalibrated version
-
-prior.eff.model<- rep(1/9, times=9)
-sc<- 1.34
-se<- 1.34
-set.seed(n)
-wages<-complete(prior.eff.model, skeletonc,mat_skeletone,sc, se,targetc,0.2, cohortsize,39,rar.prop, complete_responses)
-
-complete_responses
+cal_wages<-uninf_complete(prior.eff.model, skeletonc,mat_skeletone,0.99,0.15,0.1,targetc,0.2, cohortsize,39,rar.prop, complete_responses)
+wages<- uninf_complete(rep(1/9, times=9), skeletonc,mat_skeletone,2.78,2.37,0.1,targetc,0.2, cohortsize,39,rar.prop, complete_responses)
 
 wages_df<- data.frame(1:39,rep(wages[[1]], each=3),  sapply(1:39, function (k) ifelse(complete_responses[rep(wages[[1]], each=4)[k], k]==1|complete_responses[rep(wages[[1]], each=4)[k], k]==3, 1, 0)), 
                     sapply(1:39, function (k) ifelse(complete_responses[rep(wages[[1]], each=4)[k], k]==2|complete_responses[rep(wages[[1]], each=4)[k], k]==3, 1, 0)))
 cal_wages_df<- data.frame(1:39,rep(cal_wages[[1]], each=3),  sapply(1:39, function (k) ifelse(complete_responses[rep(cal_wages[[1]], each=4)[k], k]==1|complete_responses[rep(cal_wages[[1]], each=4)[k], k]==3, 1, 0)), 
                     sapply(1:39, function (k) ifelse(complete_responses[rep(cal_wages[[1]], each=4)[k], k]==2|complete_responses[rep(cal_wages[[1]], each=4)[k], k]==3, 1, 0)))
-
-
-
 
 wages_df$x<- seq(from =0.5, length.out=39, by=0.5)
 colnames(wages_df)<- c("pat", "dose", "cdlt", "eff", "loc")
@@ -297,8 +287,10 @@ colnames(cal_wages_df)<- c("pat", "dose", "cdlt", "eff", "loc")
 both<- wages_df%>%filter(dose==cal_wages_df$dose)
 wages_dlt<- wages_df%>%filter(cdlt==1 |eff==1)
 cal_wages_dlt<- cal_wages_df%>%filter(cdlt==1 |eff==1)
+wages_cdlt<- wages_df%>%filter(cdlt==1)
+cal_wages_cdlt<-cal_wages_df%>%filter(cdlt==1)
 
-gamma<- data.frame(c(exp(wages[[2]]), cal_wages[[2]]), c(rep("wages", times=13), rep("cal_wages", times =13)), 1:13)
+gamma<- data.frame(c(wages[[2]], cal_wages[[2]]), c(rep("wages", times=13), rep("cal_wages", times =13)), 1:13)
 colnames(gamma)<- c("val", "type", "time")
 clin<-exp(crmsens(prior=skeletonc, target=0.33, model = "empiric")$Hset)
 
@@ -314,46 +306,50 @@ p<-ggplot(wages_df, aes(loc, dose,  label = pat), show.legend = TRUE) +
   geom_point(size = 10, shape = 21, fill = "white", colour="#B2182B", stroke=2) +geom_point(data=cal_wages_df, aes(loc, dose), size = 10, shape = 21, fill = "white", colour="#2166AC", stroke=2)+geom_point(data=both, aes(loc, dose), size = 10, shape = 21, fill = "white", colour="black", stroke=2)+
   geom_point(data=wages_dlt, aes(loc, dose), size = 10, shape = 21, fill = "#A6D854", stroke=2)+
   geom_point(data=cal_wages_dlt, aes(loc, dose), size = 10, shape = 21, fill = "#A6D854", stroke=2)+
+  geom_point(data=wages_cdlt, aes(loc, dose), size = 10, shape = 21, fill = "yellow", stroke=2)+
+  geom_point(data=cal_wages_cdlt, aes(loc, dose), size = 10, shape = 21, fill = "yellow", stroke=2)+
   geom_point(size = 10, shape = 21, colour="#B2182B", stroke=2) +geom_point(data=cal_wages_df, aes(loc, dose), size = 10, shape = 21,  colour="#2166AC", stroke=2)+geom_point(data=both, aes(loc, dose), size = 10, shape = 21,  colour="black", stroke=2)+
   geom_text(data=wages_df, aes(label = pat), vjust = 0.4, size=5.5)+geom_text(data=cal_wages_df, aes(label = pat), vjust = 0.4, size=5.5)+geom_text(data=both, aes(label = pat), vjust = 0.4, size=5.5)+
   xlab("Cohort")+ ylab("Dose")+scale_x_continuous(breaks=seq(from=1, by=1.5, length.out=13), labels=1:13)+theme_classic(base_size = 25)+ theme(panel.grid.major = element_blank(),
                                                                                                                                 panel.grid.minor = element_blank(),
                                                                                                                             panel.border = element_blank(), 
                                                                                                                             panel.background = element_blank(), plot.caption = element_text(size=15, hjust=0))+
-  scale_y_continuous(limits = c(1, 5.75), breaks=1:5, labels=1:5)+geom_vline(xintercept = 6.25, linetype = "dotted", color = "grey", size = 1) 
+  scale_y_continuous(limits = c(1, 5.75), breaks=1:5, labels=1:5)+geom_vline(xintercept = 6.25, linetype = "dotted", color = "grey", size = 1)+
+  annotate("text", x = 3, y = 5.7, label = "Randomisation stage", size = 7, colour="gray30")+
+  annotate("text", x = 10, y = 5.7, label = "Maximisation stage", size = 7, colour="gray30")
   
 
-
+p
 l_gamma<- ggplot(gamma, aes(x=time, y=val, colour=type))+geom_line(size=1.5)+ scale_colour_manual(values=c("#2166AC","#B2182B"))+
-  theme_classic(base_size = 25)+theme(legend.position="none",panel.grid.major = element_blank(), panel.grid.minor=element_blank())+ labs(x = "Cohort", y ="C-DLT \n Exponent estimate")+annotate('rect', xmin=0, xmax=12, ymin=clin[5,1], ymax=9, alpha=.2, fill='#66C2A5')+
-  scale_y_continuous(limits=c(-0.5,9))+scale_x_continuous(breaks=1:13, labels=1:13)
+  theme_classic(base_size = 25)+theme(legend.position="none",panel.grid.major = element_blank(), panel.grid.minor=element_blank())+ labs(x = "Cohort", y =expression(hat(lambda)))+annotate('rect', xmin=0, xmax=13, ymin=clin[5,1], ymax=12, alpha=.2, fill='#66C2A5')+
+  scale_y_continuous(limits=c(-0.5,12))+scale_x_continuous(breaks=1:13, labels=1:13)
 
 
 l_eta<- ggplot(eta, aes(x=time, y=val, colour=type))+geom_point(stroke=2,shape = 4,size=3,)+ scale_colour_manual(values=c("#2166AC", "#B2182B"))+
   theme_classic(base_size = 25)+theme(legend.position="none",panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
-                    plot.caption = element_text(size=15, hjust=0))+ labs(x = "Cohort", y =expression(k^"*"))+annotate('rect', xmin=0, xmax=13, ymin=4.5, ymax=5.5, alpha=.2, fill='#66C2A5')+
+                    plot.caption = element_text(size=15, hjust=0))+ labs(x = "Cohort", y =expression(k^"*"))+annotate('rect', xmin=0, xmax=13.5, ymin=4.5, ymax=5.5, alpha=.2, fill='#66C2A5')+
   scale_y_continuous(limits=c(0,5.5), breaks=1:5, labels=1:5)+scale_x_continuous(breaks=1:13, labels=1:13)
-setwd("C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/figures")
+p
 
 par(mar=c(0,0,0,0))
-pdf("wages_legend.pdf", width=13)
-plot(NULL, xlim=c(0,10), xaxt="n", ylim=c(0,10), yaxt="n", bty="n", ylab="", 
+pdf("figures/wages_legend.pdf", width=13)
+plot(NULL, xlim=c(0,10), xaxt="n", ylim=c(0,10), yaxt="n", bty="n", ylab="",
      xlab="")
 legend("topleft",legend=c(expression("Dose allocation for jointly calibrated priors"),expression("Dose allocation for marginally calibrated priors"),
                           "Overlapping dose allocation ", "DLT observation", "Efficacy observation"), pch=21, cex=3, pt.cex=5, pt.lwd=2.5,col=c("#2166AC", "#B2182B", "Black", "White", "White"), pt.bg=c("white","white","white","yellow", "#A6D854"), box.col="white")
 dev.off()
 
-pdf("wages_prior_info.pdf", width=20, height=6)
-#par(mar=c(6,6,1,2)+0.1)
+pdf("figures/wages_prior_info.pdf", width=20, height=6)
+
 par(mar=c(1,1,1,1)+0.1)
 p
 dev.off()
 
-pdf("wages_gamma_est.pdf", height=4, width=5.5)
+pdf("figures/wages_gamma_est.pdf", height=4, width=5.5)
 l_gamma
 dev.off()
 
-pdf("wages_eta_est.pdf", height=4, width=5.5)
+pdf("figures/wages_eta_est.pdf", height=4, width=5.5)
 l_eta
 dev.off()
 
