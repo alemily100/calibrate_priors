@@ -6,7 +6,7 @@ library(parallel)
 ##additional functions 
 
 
-skeletonc<-  c(0.02, 0.10, 0.25, 0.44, 0.62)
+skeletonc<-  c(0.06, 0.14, 0.25, 0.38, 0.50)
 eff1<- c(0.2, 0.3, 0.4, 0.5, 0.6)
 eff2<- c(0.3, 0.4, 0.5, 0.6, 0.5)
 eff3<- c(0.4, 0.5, 0.6, 0.5, 0.4)
