@@ -72,8 +72,8 @@ cohortsize<- 3
 ncohort<- 39
 rar.prop<- 0.25
 
-true_tox<- rbind.data.frame(c(0.01, 0.02, 0.05, 0.10, 0.20), c(0.02, 0.05, 0.10, 0.20, 0.25), c(0.05, 0.10, 0.20, 0.25, 0.40),
-                                 c(0.10, 0.20, 0.25, 0.40, 0.55), c(0.20, 0.25, 0.40, 0.55, 0.70), c(0.25, 0.40, 0.55, 0.70, 0.80))
+true_tox<- rbind.data.frame(c(0.05, 0.10, 0.12, 0.15, 0.20), c(0.10, 0.12, 0.15, 0.20, 0.25), c(0.12, 0.15, 0.20, 0.25, 0.40),
+                                 c(0.15, 0.20, 0.25, 0.40, 0.55), c(0.20, 0.25, 0.40, 0.55, 0.60), c(0.25, 0.40, 0.55, 0.60, 0.70))
 dimnames(true_tox)[[2]]<- c( "1","2", "3", "4", "5")
 dimnames(true_tox)[[1]]<- c("CLIN: Sc 1", "CLIN: Sc 2", "CLIN: Sc 3", "CLIN: Sc 4", "CLIN: Sc5", "CLIN: Sc6")                       
 
@@ -275,8 +275,8 @@ for (i in 1:6){
       setwd("/home/ealger/revision_calibrate_priors")
       source("efftox_functions_5doses.R")
     }))
-    clusterExport(cl, c("se", "ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","cdlt_param","targetc","cohortsize","rar.prop", "ntrial"))
-    result<-parLapply(cl, 1:ntrial, function (k) efftoxcrm.uninf.N(clin_true,eff_true, prior.eff.model, skeletonc,mat_skeletone,cdlt_param[1], cdlt_param[2],se,targetc,0.2, cohortsize,ncohort,rar.prop))
+    clusterExport(cl, c("se","ncohort","clin_true","eff_true", "prior.eff.model", "skeletonc","mat_skeletone","cdlt_param","targetc","cohortsize","rar.prop", "ntrial"))
+    result<-parLapply(cl, 1:ntrial, function (k) efftoxcrm.uninf(clin_true,eff_true, prior.eff.model, skeletonc,mat_skeletone,cdlt_param[1], cdlt_param[2],se,targetc,0.2, cohortsize,ncohort,rar.prop))
     stopCluster(cl)
     for(m in 1:ntrial){
       dose.select[m,]<-result[[m]]$dose.select

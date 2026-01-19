@@ -1,6 +1,6 @@
 
-joint<-read.csv("C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/39.3/joint/20HN0.1.sim.39.3.csv")[,-1]
-marginal<-read.csv("C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/39.3/marginal_gamma/HN0.1/sim.39.3.csv")[,-1]
+joint<-read.csv("C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/joint/20HN0.1.sim.39.3.csv")[,-1]
+marginal<-read.csv("C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/marginal_gamma/HN0.1/sim.39.3.csv")[,-1]
 
 
 dlt.rec<-sapply(((0:53)*3)+1, function (k) which.min(abs(joint[k,]-0.25)))
