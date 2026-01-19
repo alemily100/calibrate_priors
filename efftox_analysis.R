@@ -55,3 +55,12 @@ hist(marginal.rec,
      freq = FALSE,
      add = TRUE)
 
+#random scenario generation for paper 
+set.seed(1)
+scenarios<-sample(x=54, size=12, replace=FALSE)
+rows<-sapply(1:12, function(k) joint[(3*(k-1)+1):3*k,])
+row_index<-sort(c(3*(scenarios-1)+1, (3*(scenarios-1)+2), (3*scenarios)))
+random.joint<-joint[row_index,]
+random.marginal<-marginal[row_index,]
+write.csv(random.joint, "tables/efftox.random.joint.csv")
+write.csv(random.marginal, "tables/efftox.random.marginal.csv")
