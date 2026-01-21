@@ -64,3 +64,59 @@ random.joint<-joint[row_index,]
 random.marginal<-marginal[row_index,]
 write.csv(random.joint, "tables/efftox.random.joint.csv")
 write.csv(random.marginal, "tables/efftox.random.marginal.csv")
+
+key<- data.frame(nrow=54, ncol=2)
+ind<-1
+for (i in 1:6){
+  for(j in 1:9){
+    key[ind,]<- c(ind,paste0("20HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
+    ind<-ind+1}
+}
+
+joint_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/joint/"
+
+for (i in 1:12){
+  eval(parse(text=paste0('joint',i,'<-read.csv(paste0(joint_folder_path, key[sort(scenarios),2][',i,']))[,-1]')))
+}
+
+key<- data.frame(nrow=54, ncol=2)
+ind<-1
+for (i in 1:6){
+  for(j in 1:9){
+    key[ind,]<- c(ind,paste0("sim",i,".",j,".pat.allocation39.3.csv"))
+    ind<-ind+1}
+}
+
+marginal_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/marginal_gamma/HN0.1/"
+
+for (i in 1:12){
+  eval(parse(text=paste0('marginal',i,'<-read.csv(paste0(marginal_folder_path, key[sort(scenarios),2][',i,']))[,-1]')))
+}
+
+prop.pat.joint<-NULL
+prop.pat.marg<-NULL
+correctdose<-optimal.rec[sort(scenarios)]
+underdose<- sapply(sort(scenarios), function (k) (min(1,min(optimal.rec[k][[1]])-1)):(min(optimal.rec[k][[1]])-1))
+overdose<- sapply(sort(scenarios), function (k) ((max(optimal.rec[k][[1]])+1):max(5,max(optimal.rec[k][[1]]+1))))
+
+for (i in 1:12){
+  eval(parse(text=paste0("under<-sum(colMeans(joint",i,"/rowSums(joint",i,"))[underdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("over<-sum(colMeans(joint",i,"/rowSums(joint",i,"))[overdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("best<-sum(colMeans(joint",i,"/rowSums(joint",i,"))[correctdose[",i,"][[1]]])")))
+  row<-cbind.data.frame(best, under, over)
+  prop.pat.joint<-rbind.data.frame(prop.pat.joint, row)
+}
+
+for (i in 1:12){
+  eval(parse(text=paste0("under<-sum(colMeans(marginal",i,"/rowSums(marginal",i,"))[underdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("over<-sum(colMeans(marginal",i,"/rowSums(marginal",i,"))[overdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("best<-sum(colMeans(marginal",i,"/rowSums(marginal",i,"))[correctdose[",i,"][[1]]])")))
+  row<-cbind.data.frame(best, under, over)
+  prop.pat.marg<-rbind.data.frame(prop.pat.marg, row)
+}
+
+write.csv(prop.pat.joint, "tables/efftox.prop.pat.joint.csv")
+write.csv(prop.pat.marg, "tables/efftox.prop.pat.marginal.csv")
+
+
+
