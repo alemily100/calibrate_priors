@@ -79,4 +79,40 @@ write.csv(prop.pat.joint, "tables/procrm.prop.pat.joint.csv")
 write.csv(prop.pat.marg, "tables/procrm.prop.pat.marginal.csv")
 
 
-                   
+#average number of C-DLTs and P-DLTs
+
+key_cdlt<- data.frame(nrow=36, ncol=2)
+ind<-1
+for (i in 1:6){
+  for(j in 1:6){
+    key_cdlt[ind,]<- c(ind,paste0("clay0.9.sim",i,".",j,".39.3.cdlt.csv"))
+    ind<-ind+1}
+}
+
+key_pdlt<- data.frame(nrow=36, ncol=2)
+ind<-1
+for (i in 1:6){
+  for(j in 1:6){
+    key_pdlt[ind,]<- c(ind,paste0("clay0.9.sim",i,".",j,".39.3.pdlt.csv"))
+    ind<-ind+1}
+}
+
+joint_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/procrm_results/joint/"
+marginal_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/procrm_results/marginal_gamma/"
+
+
+joint.cdlt<-c()
+joint.pdlt<-c()
+marginal.cdlt<-c()
+marginal.pdlt<-c()
+for (i in 1:12){
+  eval(parse(text=paste0('joint.cdlt[',i,']<-mean(read.csv(paste0(joint_folder_path, key_cdlt[sort(scenarios),2][',i,']))[,-1])')))
+  eval(parse(text=paste0('marginal.cdlt[',i,']<-mean(read.csv(paste0(marginal_folder_path, key_cdlt[sort(scenarios),2][',i,']))[,-1])')))
+}
+
+for (i in 1:12){
+  eval(parse(text=paste0('joint.pdlt[',i,']<-mean(read.csv(paste0(joint_folder_path, key_pdlt[sort(scenarios),2][',i,']))[,-1])')))
+  eval(parse(text=paste0('marginal.pdlt[',i,']<-mean(read.csv(paste0(marginal_folder_path, key_pdlt[sort(scenarios),2][',i,']))[,-1])')))
+}
+
+write.csv(round(cbind(marginal.cdlt, joint.cdlt,marginal.pdlt, joint.pdlt),2), "tables/procrm.dlt.csv")
