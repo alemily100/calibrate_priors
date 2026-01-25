@@ -25,6 +25,12 @@ sd(tapply(joint.rec[list.length==1], index, mean))
 
 sd(tapply(marginal.rec[list.length==1], index, mean))
 
+round(tapply(joint.rec[list.length==1], index, mean),2)
+round(tapply(marginal.rec[list.length==1], index, mean),2)
+
+sd(tapply(joint.rec, index, mean))
+sd(tapply(marginal.rec, index, mean))
+
 
 hist(marginal.rec)
 
@@ -118,5 +124,41 @@ for (i in 1:12){
 write.csv(prop.pat.joint, "tables/efftox.prop.pat.joint.csv")
 write.csv(prop.pat.marg, "tables/efftox.prop.pat.marginal.csv")
 
+#average number of C-DLTs and responses
+key_cdlt<- data.frame(nrow=54, ncol=2)
+ind<-1
+for (i in 1:6){
+  for(j in 1:9){
+    key_cdlt[ind,]<- c(ind,paste0("sim",i,".",j,".39.3.cdlt.csv"))
+    ind<-ind+1}
+}
+
+key_eff<- data.frame(nrow=54, ncol=2)
+ind<-1
+for (i in 1:6){
+  for(j in 1:9){
+    key_eff[ind,]<- c(ind,paste0("sim",i,".",j,".39.3.eff.csv"))
+    ind<-ind+1}
+}
+
+joint_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/joint/20HN0.1."
+marginal_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/marginal_gamma/HN0.1/"
+
+
+joint.cdlt<-c()
+joint.eff<-c()
+marginal.cdlt<-c()
+marginal.eff<-c()
+for (i in 1:12){
+  eval(parse(text=paste0('joint.cdlt[',i,']<-mean(rowSums(read.csv(paste0(joint_folder_path, key_cdlt[sort(scenarios),2][',i,']))[,-1]))')))
+  eval(parse(text=paste0('marginal.cdlt[',i,']<-mean(rowSums(read.csv(paste0(marginal_folder_path, key_cdlt[sort(scenarios),2][',i,']))[,-1]))')))
+}
+
+for (i in 1:12){
+  eval(parse(text=paste0('joint.eff[',i,']<-mean(rowSums(read.csv(paste0(joint_folder_path, key_eff[sort(scenarios),2][',i,']))[,-1]))')))
+  eval(parse(text=paste0('marginal.eff[',i,']<-mean(rowSums(read.csv(paste0(marginal_folder_path, key_eff[sort(scenarios),2][',i,']))[,-1]))')))
+}
+
+write.csv(round(cbind(marginal.cdlt, joint.cdlt,marginal.eff, joint.eff),2), "tables/efftox.dlt.csv")
 
 
