@@ -327,7 +327,7 @@ l_gamma<- ggplot(gamma, aes(x=time, y=val, colour=type))+geom_line(size=1.5)+ sc
 
 l_eta<- ggplot(eta, aes(x=time, y=val, colour=type))+geom_point(stroke=2,shape = 4,size=3,)+ scale_colour_manual(values=c("#2166AC", "#B2182B"))+
   theme_classic(base_size = 25)+theme(legend.position="none",panel.grid.major = element_blank(), panel.grid.minor=element_blank(),
-                    plot.caption = element_text(size=15, hjust=0))+ labs(x = "Cohort", y =expression(k^"*"))+annotate('rect', xmin=0, xmax=13.5, ymin=4.5, ymax=5.5, alpha=.2, fill='#66C2A5')+
+                    plot.caption = element_text(size=15, hjust=0))+ labs(x = "Cohort", y ="Efficacious dose \n recommendation")+annotate('rect', xmin=0, xmax=13.5, ymin=4.5, ymax=5.5, alpha=.2, fill='#66C2A5')+
   scale_y_continuous(limits=c(0,5.5), breaks=1:5, labels=1:5)+scale_x_continuous(breaks=1:13, labels=1:13)
 p
 
