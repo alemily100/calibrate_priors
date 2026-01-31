@@ -1,0 +1,163 @@
+"","1","2","3","4","5"
+"Probability of clinician DLT",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy",0.63,0.63,0.63,0.63,0.63
+"Probability recommended as MTD",0.5114,0.258,0.1738,0.05,0.0054
+"Probability of clinician DLT1",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy1",0.63,0.5,0.38,0.25,0.13
+"Probability recommended as MTD1",0.7902,0.1382,0.0448,0.0208,0.0046
+"Probability of clinician DLT2",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy2",0.5,0.63,0.63,0.63,0.63
+"Probability recommended as MTD2",0.2064,0.4318,0.254,0.0928,0.0138
+"Probability of clinician DLT3",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy3",0.5,0.63,0.5,0.38,0.25
+"Probability recommended as MTD3",0.2794,0.4982,0.1566,0.0522,0.0118
+"Probability of clinician DLT4",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy4",0.38,0.5,0.63,0.63,0.63
+"Probability recommended as MTD4",0.0598,0.1934,0.5006,0.2108,0.0336
+"Probability of clinician DLT5",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy5",0.38,0.5,0.63,0.5,0.38
+"Probability recommended as MTD5",0.0722,0.2172,0.5426,0.139,0.0288
+"Probability of clinician DLT6",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy6",0.25,0.38,0.5,0.63,0.63
+"Probability recommended as MTD6",0.0156,0.058,0.2928,0.5324,0.1008
+"Probability of clinician DLT7",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy7",0.25,0.38,0.5,0.63,0.5
+"Probability recommended as MTD7",0.0162,0.0604,0.2984,0.554,0.0706
+"Probability of clinician DLT8",0.05,0.1,0.12,0.15,0.2
+"Probability of efficacy8",0.13,0.25,0.38,0.5,0.63
+"Probability recommended as MTD8",0.0086,0.0208,0.1586,0.4872,0.3242
+"Probability of clinician DLT9",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy9",0.63,0.63,0.63,0.63,0.63
+"Probability recommended as MTD9",0.5362,0.2744,0.1446,0.0372,0.0016
+"Probability of clinician DLT10",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy10",0.63,0.5,0.38,0.25,0.13
+"Probability recommended as MTD10",0.7644,0.1474,0.0568,0.0236,0.0012
+"Probability of clinician DLT11",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy11",0.5,0.63,0.63,0.63,0.63
+"Probability recommended as MTD11",0.203,0.4664,0.2616,0.0602,0.0036
+"Probability of clinician DLT12",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy12",0.5,0.63,0.5,0.38,0.25
+"Probability recommended as MTD12",0.2728,0.5168,0.1522,0.0478,0.0044
+"Probability of clinician DLT13",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy13",0.38,0.5,0.63,0.63,0.63
+"Probability recommended as MTD13",0.0624,0.2326,0.5302,0.1516,0.0162
+"Probability of clinician DLT14",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy14",0.38,0.5,0.63,0.5,0.38
+"Probability recommended as MTD14",0.0724,0.2538,0.549,0.1056,0.0124
+"Probability of clinician DLT15",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy15",0.25,0.38,0.5,0.63,0.63
+"Probability recommended as MTD15",0.0194,0.0904,0.4076,0.4306,0.045
+"Probability of clinician DLT16",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy16",0.25,0.38,0.5,0.63,0.5
+"Probability recommended as MTD16",0.0206,0.0938,0.4102,0.439,0.03
+"Probability of clinician DLT17",0.1,0.12,0.15,0.2,0.25
+"Probability of efficacy17",0.13,0.25,0.38,0.5,0.63
+"Probability recommended as MTD17",0.0084,0.0608,0.3126,0.4672,0.145
+"Probability of clinician DLT18",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy18",0.63,0.63,0.63,0.63,0.63
+"Probability recommended as MTD18",0.5548,0.2842,0.1234,0.0198,0.0012
+"Probability of clinician DLT19",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy19",0.63,0.5,0.38,0.25,0.13
+"Probability recommended as MTD19",0.75,0.1488,0.0668,0.0124,8e-04
+"Probability of clinician DLT20",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy20",0.5,0.63,0.63,0.63,0.63
+"Probability recommended as MTD20",0.2314,0.4942,0.2234,0.035,0.0012
+"Probability of clinician DLT21",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy21",0.5,0.63,0.5,0.38,0.25
+"Probability recommended as MTD21",0.291,0.5328,0.1296,0.0278,8e-04
+"Probability of clinician DLT22",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy22",0.38,0.5,0.63,0.63,0.63
+"Probability recommended as MTD22",0.0772,0.3422,0.482,0.0824,0.0018
+"Probability of clinician DLT23",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy23",0.38,0.5,0.63,0.5,0.38
+"Probability recommended as MTD23",0.0858,0.3262,0.5056,0.0624,0.0032
+"Probability of clinician DLT24",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy24",0.25,0.38,0.5,0.63,0.63
+"Probability recommended as MTD24",0.0322,0.2042,0.485,0.2582,0.0064
+"Probability of clinician DLT25",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy25",0.25,0.38,0.5,0.63,0.5
+"Probability recommended as MTD25",0.033,0.2056,0.484,0.2576,0.0056
+"Probability of clinician DLT26",0.12,0.15,0.2,0.25,0.4
+"Probability of efficacy26",0.13,0.25,0.38,0.5,0.63
+"Probability recommended as MTD26",0.0254,0.1694,0.4524,0.3044,0.0326
+"Probability of clinician DLT27",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy27",0.63,0.63,0.63,0.63,0.63
+"Probability recommended as MTD27",0.5858,0.2734,0.0848,0.0024,0
+"Probability of clinician DLT28",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy28",0.63,0.5,0.38,0.25,0.13
+"Probability recommended as MTD28",0.7412,0.1406,0.0576,0.0056,0
+"Probability of clinician DLT29",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy29",0.5,0.63,0.63,0.63,0.63
+"Probability recommended as MTD29",0.289,0.503,0.1538,0.0074,0
+"Probability of clinician DLT30",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy30",0.5,0.63,0.5,0.38,0.25
+"Probability recommended as MTD30",0.327,0.5128,0.0984,0.0048,0
+"Probability of clinician DLT31",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy31",0.38,0.5,0.63,0.63,0.63
+"Probability recommended as MTD31",0.1356,0.443,0.3532,0.0154,0
+"Probability of clinician DLT32",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy32",0.38,0.5,0.63,0.5,0.38
+"Probability recommended as MTD32",0.1464,0.4418,0.3448,0.0168,0
+"Probability of clinician DLT33",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy33",0.25,0.38,0.5,0.63,0.63
+"Probability recommended as MTD33",0.095,0.3644,0.4284,0.0556,6e-04
+"Probability of clinician DLT34",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy34",0.25,0.38,0.5,0.63,0.5
+"Probability recommended as MTD34",0.095,0.3642,0.4292,0.0554,2e-04
+"Probability of clinician DLT35",0.15,0.2,0.25,0.4,0.55
+"Probability of efficacy35",0.13,0.25,0.38,0.5,0.63
+"Probability recommended as MTD35",0.0812,0.3622,0.4268,0.076,4e-04
+"Probability of clinician DLT36",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy36",0.63,0.63,0.63,0.63,0.63
+"Probability recommended as MTD36",0.577,0.208,0.0138,0,0
+"Probability of clinician DLT37",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy37",0.63,0.5,0.38,0.25,0.13
+"Probability recommended as MTD37",0.655,0.1202,0.015,0,0
+"Probability of clinician DLT38",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy38",0.5,0.63,0.63,0.63,0.63
+"Probability recommended as MTD38",0.3568,0.405,0.0242,4e-04,0
+"Probability of clinician DLT39",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy39",0.5,0.63,0.5,0.38,0.25
+"Probability recommended as MTD39",0.3896,0.3874,0.0202,0,0
+"Probability of clinician DLT40",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy40",0.38,0.5,0.63,0.63,0.63
+"Probability recommended as MTD40",0.2548,0.4628,0.0712,4e-04,0
+"Probability of clinician DLT41",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy41",0.38,0.5,0.63,0.5,0.38
+"Probability recommended as MTD41",0.2534,0.4564,0.0782,0,0
+"Probability of clinician DLT42",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy42",0.25,0.38,0.5,0.63,0.63
+"Probability recommended as MTD42",0.2314,0.4618,0.1026,4e-04,0
+"Probability of clinician DLT43",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy43",0.25,0.38,0.5,0.63,0.5
+"Probability recommended as MTD43",0.2314,0.4618,0.1026,4e-04,0
+"Probability of clinician DLT44",0.2,0.25,0.4,0.55,0.6
+"Probability of efficacy44",0.13,0.25,0.38,0.5,0.63
+"Probability recommended as MTD44",0.2344,0.4598,0.0972,0.0012,0
+"Probability of clinician DLT45",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy45",0.63,0.63,0.63,0.63,0.63
+"Probability recommended as MTD45",0.4206,0.0316,4e-04,0,0
+"Probability of clinician DLT46",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy46",0.63,0.5,0.38,0.25,0.13
+"Probability recommended as MTD46",0.4396,0.0208,0,0,0
+"Probability of clinician DLT47",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy47",0.5,0.63,0.63,0.63,0.63
+"Probability recommended as MTD47",0.3444,0.0882,2e-04,0,0
+"Probability of clinician DLT48",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy48",0.5,0.63,0.5,0.38,0.25
+"Probability recommended as MTD48",0.3486,0.0836,4e-04,0,0
+"Probability of clinician DLT49",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy49",0.38,0.5,0.63,0.63,0.63
+"Probability recommended as MTD49",0.3048,0.1056,0.0012,0,0
+"Probability of clinician DLT50",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy50",0.38,0.5,0.63,0.5,0.38
+"Probability recommended as MTD50",0.303,0.1108,0.0018,0,0
+"Probability of clinician DLT51",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy51",0.25,0.38,0.5,0.63,0.63
+"Probability recommended as MTD51",0.3004,0.1054,0.004,0,0
+"Probability of clinician DLT52",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy52",0.25,0.38,0.5,0.63,0.5
+"Probability recommended as MTD52",0.3004,0.1054,0.004,0,0
+"Probability of clinician DLT53",0.25,0.4,0.55,0.6,0.7
+"Probability of efficacy53",0.13,0.25,0.38,0.5,0.63
+"Probability recommended as MTD53",0.289,0.108,0.002,0,0
