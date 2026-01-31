@@ -161,4 +161,23 @@ for (i in 1:12){
 
 write.csv(round(cbind(marginal.cdlt, joint.cdlt,marginal.eff, joint.eff),2), "tables/efftox.dlt.csv")
 
+#assess allocation to best dose when each dose is best 
+
+sc<-which(sapply(optimal.rec, function(x) 1 %in% x))
+
+prop.pat.joint<-NULL
+prop.pat.marg<-NULL
+correctdose<-optimal.rec
+underdose<- sapply(1:54, function (k) (min(1,min(optimal.rec[k][[1]])-1)):(min(optimal.rec[k][[1]])-1))
+overdose<- sapply(1:54, function (k) ((max(optimal.rec[k][[1]])+1):max(5,max(optimal.rec[k][[1]]+1))))
+
+for (i in sc){
+  eval(parse(text=paste0("best.joint<-round(mean(sum(colMeans(joint",i,"/rowSums(joint",i,",na.rm=TRUE),na.rm=TRUE)[correctdose[",i,"][[1]]],na.rm=TRUE), na.rm=TRUE),2)")))
+  eval(parse(text=paste0("best.marginal<-round(mean(sum(colMeans(marginal",i,"/rowSums(marginal",i,",na.rm=TRUE),na.rm=TRUE)[correctdose[",i,"][[1]]],na.rm=TRUE)),2)")))
+}
+best.joint
+best.marginal
+
+
+##
 
