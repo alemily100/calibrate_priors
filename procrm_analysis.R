@@ -14,7 +14,7 @@ marginal.rec<-sapply(1:36, function(k) marginal_gamma[((k-1)*3)+3, optimal.rec[k
 
 
 sd(joint.rec)
-sqrt(var(marginal.rec))
+sd(marginal.rec)
 mean(joint.rec)
 mean(marginal.rec)
 
@@ -116,3 +116,28 @@ for (i in 1:12){
 }
 
 write.csv(round(cbind(marginal.cdlt, joint.cdlt,marginal.pdlt, joint.pdlt),2), "tables/procrm.dlt.csv")
+
+#assess allocation to best dose when each dose is best 
+
+
+joint_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/procrm_results/joint/"
+marginal_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/procrm_results/marginal_gamma/"
+
+for (i in 1:36){
+  eval(parse(text=paste0('joint',i,'<-read.csv(paste0(joint_folder_path, key[,2][',i,']))[,-1]')))
+  eval(parse(text=paste0('marginal',i,'<-read.csv(paste0(marginal_folder_path, key[,2][',i,']))[,-1]')))
+}
+
+
+sc<-which(sapply(optimal.rec, function(x) 5 %in% x))
+
+prop.pat.joint<-NULL
+prop.pat.marg<-NULL
+correctdose<-optimal.rec
+
+for (i in sc){
+  eval(parse(text=paste0("best.joint<-round(mean(sum(colMeans(joint",i,"/rowSums(joint",i,",na.rm=TRUE),na.rm=TRUE)[correctdose[",i,"][[1]]],na.rm=TRUE), na.rm=TRUE),2)")))
+  eval(parse(text=paste0("best.marginal<-round(mean(sum(colMeans(marginal",i,"/rowSums(marginal",i,",na.rm=TRUE),na.rm=TRUE)[correctdose[",i,"][[1]]],na.rm=TRUE)),2)")))
+}
+best.joint
+best.marginal
