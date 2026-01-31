@@ -62,8 +62,8 @@ ggplot(M, aes(x = as.numeric(scen), y = as.numeric(pcs), color = as.factor(cal_t
                                                 labels=c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"))+
   scale_y_continuous(limits = c(0, 1))+
   scale_color_manual(values = c("#FC8D62", "#8DA0CB"),  labels = c("Marginal priors","Dose-agnostic priors"))+
-  scale_shape_discrete(labels = c(expression(paste(delta[C], "= 0.03")),
-                                  expression(paste(delta[C], "= 0.05")),expression(paste(delta[C], "= 0.07"))))+theme_minimal(base_size = 15)+
+  scale_shape_discrete(labels = c(expression(paste(delta, "= 0.03")),
+                                  expression(paste(delta, "= 0.05")),expression(paste(delta, "= 0.07"))))+theme_minimal(base_size = 15)+
   theme(legend.position = "bottom",legend.direction = "vertical")
 dev.off()
 
