@@ -16,13 +16,13 @@ row_index<-sort(c(3*(scenarios-1)+1, (3*(scenarios-1)+2), (3*scenarios)))
 random.joint<-joint[row_index,]
 
 key20<- data.frame(nrow=54, ncol=2)
-key10<- data.frame(nrow=54, ncol=2)
+key16<- data.frame(nrow=54, ncol=2)
 key40<- data.frame(nrow=54, ncol=2)
 ind<-1
 for (i in 1:6){
   for(j in 1:9){
     key20[ind,]<- c(ind,paste0("20HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
-    key10[ind,]<- c(ind,paste0("10HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
+    key16[ind,]<- c(ind,paste0("16HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
     key40[ind,]<- c(ind,paste0("40HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
     ind<-ind+1}
 }
@@ -30,12 +30,12 @@ for (i in 1:6){
 joint_folder_path<-"C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors/results/efftox_results/joint/"
 
 for (i in 1:12){
-  eval(parse(text=paste0('joint10.',i,'<-read.csv(paste0(joint_folder_path, key10[sort(scenarios),2][',i,']))[,-1]')))
+  eval(parse(text=paste0('joint16.',i,'<-read.csv(paste0(joint_folder_path, key16[sort(scenarios),2][',i,']))[,-1]')))
   eval(parse(text=paste0('joint20.',i,'<-read.csv(paste0(joint_folder_path, key20[sort(scenarios),2][',i,']))[,-1]')))
   eval(parse(text=paste0('joint40.',i,'<-read.csv(paste0(joint_folder_path, key40[sort(scenarios),2][',i,']))[,-1]')))
 }
 
-prop.pat.joint10<-NULL
+prop.pat.joint16<-NULL
 prop.pat.joint20<-NULL
 prop.pat.joint40<-NULL
 correctdose<-optimal.rec[sort(scenarios)]
@@ -43,9 +43,9 @@ underdose<- sapply(sort(scenarios), function (k) (min(1,min(optimal.rec[k][[1]])
 overdose<- sapply(sort(scenarios), function (k) ((max(optimal.rec[k][[1]])+1):max(5,max(optimal.rec[k][[1]]+1))))
 
 for (i in 1:12){
-  eval(parse(text=paste0("under<-sum(colMeans(joint10.",i,"/rowSums(joint10.",i,"))[underdose[",i,"][[1]]])")))
-  eval(parse(text=paste0("over<-sum(colMeans(joint10.",i,"/rowSums(joint10.",i,"))[overdose[",i,"][[1]]])")))
-  eval(parse(text=paste0("best<-sum(colMeans(joint10.",i,"/rowSums(joint10.",i,"))[correctdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("under<-sum(colMeans(joint16.",i,"/rowSums(joint16.",i,"))[underdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("over<-sum(colMeans(joint16.",i,"/rowSums(joint16.",i,"))[overdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("best<-sum(colMeans(joint16.",i,"/rowSums(joint16.",i,"))[correctdose[",i,"][[1]]])")))
   row<-cbind.data.frame(best, under, over)
   prop.pat.joint10<-rbind.data.frame(prop.pat.joint10, row)
   eval(parse(text=paste0("under<-sum(colMeans(joint20.",i,"/rowSums(joint20.",i,"))[underdose[",i,"][[1]]])")))
