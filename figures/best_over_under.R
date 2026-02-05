@@ -18,12 +18,16 @@ random.joint<-joint[row_index,]
 key20<- data.frame(nrow=54, ncol=2)
 key16<- data.frame(nrow=54, ncol=2)
 key40<- data.frame(nrow=54, ncol=2)
+key58<- data.frame(nrow=54, ncol=2)
+key97<- data.frame(nrow=54, ncol=2)
 ind<-1
 for (i in 1:6){
   for(j in 1:9){
     key20[ind,]<- c(ind,paste0("20HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
     key16[ind,]<- c(ind,paste0("16HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
     key40[ind,]<- c(ind,paste0("40HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
+    key58[ind,]<- c(ind,paste0("58HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
+    key97[ind,]<- c(ind,paste0("97HN0.1.sim",i,".",j,".pat.allocation39.3.csv"))
     ind<-ind+1}
 }
 
@@ -33,11 +37,15 @@ for (i in 1:12){
   eval(parse(text=paste0('joint16.',i,'<-read.csv(paste0(joint_folder_path, key16[sort(scenarios),2][',i,']))[,-1]')))
   eval(parse(text=paste0('joint20.',i,'<-read.csv(paste0(joint_folder_path, key20[sort(scenarios),2][',i,']))[,-1]')))
   eval(parse(text=paste0('joint40.',i,'<-read.csv(paste0(joint_folder_path, key40[sort(scenarios),2][',i,']))[,-1]')))
+  eval(parse(text=paste0('joint58.',i,'<-read.csv(paste0(joint_folder_path, key58[sort(scenarios),2][',i,']))[,-1]')))
+  eval(parse(text=paste0('joint97.',i,'<-read.csv(paste0(joint_folder_path, key97[sort(scenarios),2][',i,']))[,-1]')))
 }
 
 prop.pat.joint16<-NULL
 prop.pat.joint20<-NULL
 prop.pat.joint40<-NULL
+prop.pat.joint58<-NULL
+prop.pat.joint97<-NULL
 correctdose<-optimal.rec[sort(scenarios)]
 underdose<- sapply(sort(scenarios), function (k) (min(1,min(optimal.rec[k][[1]])-1)):(min(optimal.rec[k][[1]])-1))
 overdose<- sapply(sort(scenarios), function (k) ((max(optimal.rec[k][[1]])+1):max(5,max(optimal.rec[k][[1]]+1))))
@@ -58,16 +66,27 @@ for (i in 1:12){
   eval(parse(text=paste0("best<-sum(colMeans(joint40.",i,"/rowSums(joint40.",i,"))[correctdose[",i,"][[1]]])")))
   row<-cbind.data.frame(best, under, over)
   prop.pat.joint40<-rbind.data.frame(prop.pat.joint40, row)
+  eval(parse(text=paste0("under<-sum(colMeans(joint58.",i,"/rowSums(joint58.",i,"))[underdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("over<-sum(colMeans(joint58.",i,"/rowSums(joint58.",i,"))[overdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("best<-sum(colMeans(joint58.",i,"/rowSums(joint58.",i,"))[correctdose[",i,"][[1]]])")))
+  row<-cbind.data.frame(best, under, over)
+  prop.pat.joint58<-rbind.data.frame(prop.pat.joint58, row)
+  eval(parse(text=paste0("under<-sum(colMeans(joint97.",i,"/rowSums(joint97.",i,"))[underdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("over<-sum(colMeans(joint97.",i,"/rowSums(joint97.",i,"))[overdose[",i,"][[1]]])")))
+  eval(parse(text=paste0("best<-sum(colMeans(joint97.",i,"/rowSums(joint97.",i,"))[correctdose[",i,"][[1]]])")))
+  row<-cbind.data.frame(best, under, over)
+  prop.pat.joint97<-rbind.data.frame(prop.pat.joint97, row)
 }
 
 
-M<-cbind(rbind(prop.pat.joint16,prop.pat.joint20,prop.pat.joint40), rep(1:12, times=3), rep(1:3, each=12))
+M<-cbind(rbind(prop.pat.joint16,prop.pat.joint20,prop.pat.joint40, prop.pat.joint58, prop.pat.joint97), rep(1:12, times=5), rep(1:5, each=12))
 
 colnames(M)<- c("correct", "under", "over", "scen", "category")
 M[is.na(M[,3]),3]<-0
 #eval(parse(text=paste0("write.csv(M, 'wages.over_under.",ncohort,".csv')")))
 
-labels <-  c(expression(paste("Jointly calibrated, ", alpha[l], " = 1.03")), expression(paste("Jointly calibrated, ", alpha[l], " = 1.17")), expression(paste("Jointly calibrated, ", alpha[l], " = 1.88")))
+labels <-  c(expression(paste("Jointly calibrated, ", alpha[l], " = 1.03")), expression(paste("Jointly calibrated, ", alpha[l], " = 1.17")), expression(paste("Jointly calibrated, ", alpha[l], " = 1.88")),
+             expression(paste("Jointly calibrated, ", alpha[l], " = 2.51")), expression(paste("Jointly calibrated, ", alpha[l], " = 3.89")))
 
 setwd("C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors")
 
@@ -82,8 +101,8 @@ ggplot(M, aes(x = as.numeric(scen), y = as.numeric(over), color = factor(categor
        shape = "Prior")+ scale_x_continuous(breaks = 1:12, 
                                             labels=c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"))+
   scale_y_continuous(limits = c(0, 1))+
-  scale_color_manual(values=brewer.pal(3,"Set1"),labels = labels)+
-  scale_shape_manual(values = c(3,5,6),labels = labels)+theme_minimal(base_size = 15)+
+  scale_color_manual(values=brewer.pal(5,"Set1"),labels = labels)+
+  scale_shape_manual(values = c(3,5,6,7,8),labels = labels)+theme_minimal(base_size = 15)+
   theme(legend.position = "none")
 dev.off()
 
@@ -98,8 +117,8 @@ ggplot(M, aes(x = as.numeric(scen), y = as.numeric(under), color = factor(catego
        shape = "Prior")+ scale_x_continuous(breaks = 1:12, 
                                             labels=c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"))+
   scale_y_continuous(limits = c(0, 1))+
-  scale_color_manual(values=brewer.pal(3,"Set1"),labels = labels)+
-  scale_shape_manual(values = c(3,5,6),labels = labels)+theme_minimal(base_size = 15)+
+  scale_color_manual(values=brewer.pal(5,"Set1"),labels = labels)+
+  scale_shape_manual(values = c(3,5,6,7,8),labels = labels)+theme_minimal(base_size = 15)+
   theme(legend.position = "none")
 dev.off()
 
@@ -114,6 +133,6 @@ ggplot(M, aes(x = as.numeric(scen), y = as.numeric(correct), color = factor(cate
        shape = "Prior")+ scale_x_continuous(breaks = 1:12, 
                                             labels=c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"))+
   scale_y_continuous(limits = c(0, 1))+
-  scale_color_manual(values=brewer.pal(3,"Set1"),labels = labels)+
-  scale_shape_manual(values = c(3,5,6), labels = labels)+theme_minimal(base_size = 15)
+  scale_color_manual(values=brewer.pal(5,"Set1"),labels = labels)+
+  scale_shape_manual(values = c(3,5,6,7,8), labels = labels)+theme_minimal(base_size = 15)
 dev.off()
