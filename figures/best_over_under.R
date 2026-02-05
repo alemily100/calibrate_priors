@@ -47,7 +47,7 @@ for (i in 1:12){
   eval(parse(text=paste0("over<-sum(colMeans(joint16.",i,"/rowSums(joint16.",i,"))[overdose[",i,"][[1]]])")))
   eval(parse(text=paste0("best<-sum(colMeans(joint16.",i,"/rowSums(joint16.",i,"))[correctdose[",i,"][[1]]])")))
   row<-cbind.data.frame(best, under, over)
-  prop.pat.joint10<-rbind.data.frame(prop.pat.joint10, row)
+  prop.pat.joint16<-rbind.data.frame(prop.pat.joint16, row)
   eval(parse(text=paste0("under<-sum(colMeans(joint20.",i,"/rowSums(joint20.",i,"))[underdose[",i,"][[1]]])")))
   eval(parse(text=paste0("over<-sum(colMeans(joint20.",i,"/rowSums(joint20.",i,"))[overdose[",i,"][[1]]])")))
   eval(parse(text=paste0("best<-sum(colMeans(joint20.",i,"/rowSums(joint20.",i,"))[correctdose[",i,"][[1]]])")))
@@ -61,13 +61,13 @@ for (i in 1:12){
 }
 
 
-M<-cbind(rbind(prop.pat.joint10,prop.pat.joint20,prop.pat.joint40), rep(1:12, times=3), rep(1:3, each=12))
+M<-cbind(rbind(prop.pat.joint16,prop.pat.joint20,prop.pat.joint40), rep(1:12, times=3), rep(1:3, each=12))
 
 colnames(M)<- c("correct", "under", "over", "scen", "category")
-
+M[is.na(M[,3]),3]<-0
 #eval(parse(text=paste0("write.csv(M, 'wages.over_under.",ncohort,".csv')")))
 
-labels <-  c(expression(paste("Jointly calibrated, ", alpha[l], " = 0.82")), expression(paste("Jointly calibrated, ", alpha[l], " = 1.17")), expression(paste("Jointly calibrated, ", alpha[l], " = 1.88")))
+labels <-  c(expression(paste("Jointly calibrated, ", alpha[l], " = 1.03")), expression(paste("Jointly calibrated, ", alpha[l], " = 1.17")), expression(paste("Jointly calibrated, ", alpha[l], " = 1.88")))
 
 setwd("C:/Users/ealger/OneDrive - The Institute of Cancer Research/M/PhD/Trial Designs/calibrate_priors/Statistics in Medicine/revision/code/calibrate_priors")
 
