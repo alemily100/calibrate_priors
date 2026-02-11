@@ -265,7 +265,7 @@ ncohort<- 39
 rar.prop<- 0.25
 
 w<- 0:3
-set.seed(17023)
+set.seed(17027)
 u_pat<-matrix(runif(3*ncohort), nrow=ncohort)
 table<-generate_table(10000, true_tox_clin,true_eff)
 complete_responses<-sapply(1:ncohort, function (m) sapply(1:5, function(k) patient_outcome(k, u_pat[m,], table)))
@@ -330,25 +330,25 @@ l_eta<- ggplot(eta, aes(x=time, y=val, colour=type))+geom_point(stroke=2,shape =
   scale_y_continuous(limits=c(0,5.5), breaks=1:5, labels=1:5)+scale_x_continuous(breaks=1:13, labels=1:13)
 p
 
-par(mar=c(0,0,0,0))
-pdf("figures/wages_legend.pdf", width=13)
+#par(mar=c(0,0,0,0))
+#pdf("figures/wages_legend.pdf", width=13)
 plot(NULL, xlim=c(0,10), xaxt="n", ylim=c(0,10), yaxt="n", bty="n", ylab="",
      xlab="")
 legend("topleft",legend=c(expression("Dose allocation with jointly calibrated priors"),expression("Dose allocation with marginally calibrated priors"),
                           "Overlapping dose allocation ", "DLT observation", "Efficacy observation"), pch=21, cex=3, pt.cex=5, pt.lwd=2.5,col=c("#2166AC", "#B2182B", "Black", "White", "White"), pt.bg=c("white","white","white","yellow", "#A6D854"), box.col="white")
-dev.off()
+#dev.off()
 
-pdf("figures/wages_prior_info.pdf", width=20, height=6)
+#pdf("figures/wages_prior_info.pdf", width=20, height=6)
 
-par(mar=c(1,1,1,1)+0.1)
+#par(mar=c(1,1,1,1)+0.1)
 p
-dev.off()
+#dev.off()
 
-pdf("figures/wages_gamma_est.pdf", height=4, width=5.5)
+#pdf("figures/wages_gamma_est.pdf", height=4, width=5.5)
 l_gamma
-dev.off()
+#dev.off()
 
-pdf("figures/wages_eta_est.pdf", height=4, width=5.5)
+#pdf("figures/wages_eta_est.pdf", height=4, width=5.5)
 l_eta
-dev.off()
+#dev.off()
 
