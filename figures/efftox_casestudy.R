@@ -265,11 +265,10 @@ ncohort<- 39
 rar.prop<- 0.25
 
 w<- 0:3
-set.seed(17013)
+set.seed(17023)
 u_pat<-matrix(runif(3*ncohort), nrow=ncohort)
 table<-generate_table(10000, true_tox_clin,true_eff)
 complete_responses<-sapply(1:ncohort, function (m) sapply(1:5, function(k) patient_outcome(k, u_pat[m,], table)))
-set.seed(n)
 cal_wages<-uninf_complete(prior.eff.model, skeletonc,mat_skeletone,0.99,0.15,0.1,targetc,0.2, cohortsize,39,rar.prop, complete_responses)
 wages<- uninf_complete(rep(1/9, times=9), skeletonc,mat_skeletone,2.78,2.37,0.1,targetc,0.2, cohortsize,39,rar.prop, complete_responses)
 
@@ -335,7 +334,7 @@ par(mar=c(0,0,0,0))
 pdf("figures/wages_legend.pdf", width=13)
 plot(NULL, xlim=c(0,10), xaxt="n", ylim=c(0,10), yaxt="n", bty="n", ylab="",
      xlab="")
-legend("topleft",legend=c(expression("Dose allocation for jointly calibrated priors"),expression("Dose allocation for marginally calibrated priors"),
+legend("topleft",legend=c(expression("Dose allocation with jointly calibrated priors"),expression("Dose allocation with marginally calibrated priors"),
                           "Overlapping dose allocation ", "DLT observation", "Efficacy observation"), pch=21, cex=3, pt.cex=5, pt.lwd=2.5,col=c("#2166AC", "#B2182B", "Black", "White", "White"), pt.bg=c("white","white","white","yellow", "#A6D854"), box.col="white")
 dev.off()
 
