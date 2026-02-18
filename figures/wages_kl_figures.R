@@ -130,7 +130,7 @@ pdf("figures/a_priori_wages_uncal.pdf", width=5, height=4)
 ggplot(df, aes(dose, prop)) +
   geom_bar(stat="identity", position = "dodge", fill="#FFD92F") + 
   ylim(0,0.5)+
-  geom_hline(yintercept = 1/6, color = "grey", linetype = "dashed", lwd=2)+
+  geom_hline(yintercept = 1/5, color = "grey", linetype = "dashed", lwd=2)+
   theme_classic(base_size = 15)+theme(legend.position =c(0.22,0.95))+
   xlab("Dose")+ylab("A priori dose recommendation")+
   labs(fill = " ")+ scale_x_continuous(breaks = 1:6)
